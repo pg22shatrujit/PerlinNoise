@@ -1,3 +1,7 @@
 # PerlinNoise
 
-![alt text](https://github.com/pg22shatrujit/PerlinNoise/blob/main/cover.png)
+Generating a wave in unity using cubes and perlin noise
+
+![Wave in action](https://github.com/pg22shatrujit/PerlinNoise/blob/main/cover.gif)
+
+![Static image of the wave](https://github.com/pg22shatrujit/PerlinNoise/blob/main/cover.png)
