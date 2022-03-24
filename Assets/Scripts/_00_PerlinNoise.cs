@@ -9,7 +9,7 @@ public class _00_PerlinNoise : MonoBehaviour
     int textureSize = 32,
         sceneSize = 512;
 
-    [SerializeField, Range(1, 200)]
+    [SerializeField, Range(1, 20)]
     int heightMultiplier = 20;
 
     [SerializeField, Range(0, 20)]
@@ -62,9 +62,8 @@ public class _00_PerlinNoise : MonoBehaviour
                 Color color = new Color(grayCol, grayCol, grayCol);
                 noiseTexture.SetPixel(i, j, color);
 
-                Vector3 copyPos = new Vector3(i * cubeSize, grayCol * heightMultiplier, j * cubeSize);
+                Vector3 copyPos = new Vector3(i, grayCol * 20, j);
                 GameObject copy = Instantiate(sampleCube);
-                copy.transform.localScale = new Vector3(cubeSize, cubeSize, cubeSize);
                 copy.transform.position = copyPos;
 
                 //Make tiles a child of the manager
