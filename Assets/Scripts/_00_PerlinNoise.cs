@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,33 +6,82 @@ using UnityEngine;
 public class _00_PerlinNoise : MonoBehaviour
 {
     [SerializeField]
-    int textureSize = 32;
+    int textureSize = 32,
+        sceneSize = 512;
+
+    [SerializeField, Range(1, 20)]
+    int heightMultiplier = 20;
+
+    [SerializeField, Range(0, 20)]
+    float zoomFactor = 1;
 
     [SerializeField]
     GameObject textureSample;
 
     Texture2D noiseTexture;
 
+    [SerializeField]
+    GameObject sampleCube;
+
+    float offset = 0,
+          cubeSize = 0;
+
     // Start is called before the first frame update
     void Start()
     {
+        setOffset();
+        setCubeSize();
         noiseTexture = new Texture2D(textureSize, textureSize);
+
+        InvokeRepeating("runBlocks", 0, 0.25f);
+    }
+
+    private void setCubeSize()
+    {
+        cubeSize = (float)sceneSize / (float)textureSize;
     }
 
     // Update is called once per frame
-    void Update()
+    void runBlocks()
     {
-        for(int i = 0; i < textureSize; i++)
+        foreach(Transform any in gameObject.transform)
         {
-            for(int j = 0; j < textureSize; j++)
+            Destroy(any.gameObject);
+        }
+        makeTiles();
+    }
+
+    void makeTiles ()
+    {
+        for (int i = 0; i < textureSize; i++)
+        {
+            for (int j = 0; j < textureSize; j++)
             {
-                float grayCol = Mathf.PerlinNoise((float)i / (float)textureSize, (float)j / (float)textureSize);
+                //noise intensity
+                float grayCol = Mathf.PerlinNoise(getTextureCoordinate(i), getTextureCoordinate(j));
                 Color color = new Color(grayCol, grayCol, grayCol);
                 noiseTexture.SetPixel(i, j, color);
+
+                Vector3 copyPos = new Vector3(i, grayCol * 20, j);
+                GameObject copy = Instantiate(sampleCube);
+                copy.transform.position = copyPos;
+
+                //Make tiles a child of the manager
+                copy.transform.parent = gameObject.transform;
             }
         }
         noiseTexture.Apply();
 
         textureSample.GetComponent<Renderer>().material.mainTexture = noiseTexture;
+    }
+
+    float getTextureCoordinate(int coordinate)
+    {
+        return (float)coordinate * zoomFactor / (float)textureSize + Time.time - offset;
+    }
+
+    void setOffset()
+    {
+        offset = (float)textureSize / 2;
     }
 }
