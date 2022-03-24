@@ -28,9 +28,9 @@ public class _00_PerlinNoise : MonoBehaviour
                 float grayCol = Mathf.PerlinNoise((float)i / (float)textureSize, (float)j / (float)textureSize);
                 Color color = new Color(grayCol, grayCol, grayCol);
                 noiseTexture.SetPixel(i, j, color);
-                noiseTexture.Apply();
             }
         }
+        noiseTexture.Apply();
 
         textureSample.GetComponent<Renderer>().material.mainTexture = noiseTexture;
     }
